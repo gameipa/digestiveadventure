@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Digestive Adventure — Petualangan Sistem Pencernaan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deep:#0d0b34;
+  --deep2:#1b1060;
+  --violet:#7b3ff2;
+  --pink:#ff4d8d;
+  --orange:#ff9f2e;
+  --green:#28d17c;
+  --cyan:#25e0e0;
+  --ink:#f3f0ff;
+  --muted:#b3aede;
+  --card:rgba(255,255,255,.07);
+  --card-bd:rgba(255,255,255,.16);
+  --shadow:0 18px 40px rgba(5,2,30,.45);
+  --radius:22px;
+  --font-h:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --font-b:"Nunito","Segoe UI",system-ui,sans-serif;
+}
+html[data-theme="light"]{
+  --deep:#eef1ff;
+  --deep2:#dfe4ff;
+  --ink:#1c1550;
+  --muted:#5b559a;
+  --card:rgba(255,255,255,.75);
+  --card-bd:rgba(90,70,200,.22);
+  --shadow:0 14px 30px rgba(60,40,150,.18);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;font-family:var(--font-b);color:var(--ink);
+  background:
+    radial-gradient(1100px 700px at 12% -10%, rgba(123,63,242,.55), transparent 60%),
+    radial-gradient(900px 600px at 95% 8%, rgba(255,77,141,.35), transparent 60%),
+    radial-gradient(900px 700px at 50% 110%, rgba(37,224,224,.28), transparent 60%),
+    linear-gradient(160deg,var(--deep) 0%, var(--deep2) 55%, var(--deep) 100%);
+  background-attachment:fixed;
+  min-height:100dvh;overflow-x:hidden;
+}
+h1,h2,h3,h4,.btn,.pill{font-family:var(--font-h);letter-spacing:.2px}
+button{font-family:inherit}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:90}
+.wrap{position:relative;z-index:2;max-width:980px;margin:0 auto;padding:16px 16px 40px}
+.screen{display:none;animation:fadeUp .45s ease both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+.card{background:var(--card);border:1px solid var(--card-bd);border-radius:var(--radius);
+  box-shadow:var(--shadow);backdrop-filter:blur(10px);padding:20px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:0;border-radius:16px;padding:13px 20px;font-size:1rem;font-weight:700;
+  color:#fff;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease, filter .15s;
+  background:linear-gradient(135deg,var(--violet),var(--pink));
+  box-shadow:0 8px 20px rgba(123,63,242,.35);
+}
+.btn:hover{transform:translateY(-2px) scale(1.02);filter:brightness(1.07)}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.btn.ghost{background:var(--card);border:1px solid var(--card-bd);color:var(--ink);box-shadow:none}
+.btn.green{background:linear-gradient(135deg,#16a765,var(--green));box-shadow:0 8px 20px rgba(40,209,124,.3)}
+.btn.orange{background:linear-gradient(135deg,#ff7a2e,var(--orange));box-shadow:0 8px 20px rgba(255,159,46,.3)}
+.btn.big{font-size:1.15rem;padding:17px 30px;border-radius:20px}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+
+/* ===== HOME ===== */
+.home{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:26px 0}
+.home h1{font-size:clamp(2.3rem,8vw,4rem);margin:0;line-height:1.05;
+  background:linear-gradient(100deg,#fff,var(--cyan),var(--pink),var(--orange));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px rgba(255,77,141,.35))}
+html[data-theme="light"] .home h1{background:linear-gradient(100deg,#3b1fa8,#c2185b,#e07b00);-webkit-background-clip:text;background-clip:text}
+.home .sub{font-size:clamp(1rem,3.4vw,1.3rem);font-weight:700;color:var(--cyan)}
+.home p.lead{max-width:60ch;color:var(--muted);font-size:1.02rem;margin:0 auto}
+.hero{display:flex;align-items:flex-end;justify-content:center;gap:6px;font-size:clamp(3rem,12vw,5.4rem);margin:4px 0}
+.hero span{display:inline-block;animation:bob 3.4s ease-in-out infinite}
+.hero span:nth-child(2){animation-delay:.4s}
+.hero span:nth-child(3){animation-delay:.8s}
+.hero span:nth-child(4){animation-delay:1.2s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+.resume{border:1px dashed var(--cyan);background:rgba(37,224,224,.09)}
+
+/* ===== HUD ===== */
+.hud{position:sticky;top:8px;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
+  background:var(--card);border:1px solid var(--card-bd);border-radius:18px;padding:10px 14px;margin-bottom:14px;backdrop-filter:blur(12px)}
+.hud .item{font-weight:800;font-size:.95rem;white-space:nowrap}
+.hud .item small{display:block;font-weight:700;font-size:.68rem;color:var(--muted);letter-spacing:.5px}
+.bar{flex:1;min-width:130px;height:12px;border-radius:99px;background:rgba(0,0,0,.25);overflow:hidden;border:1px solid var(--card-bd)}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .6s cubic-bezier(.2,.9,.3,1)}
+.heart.lost{filter:grayscale(1);opacity:.4}
+.combo-hot{color:var(--orange);animation:pulse .7s ease}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+/* ===== MAP ===== */
+.map-list{display:grid;gap:12px}
+.node{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:20px;cursor:pointer;
+  background:var(--card);border:1px solid var(--card-bd);transition:transform .18s,box-shadow .18s}
+.node:hover{transform:translateX(5px)}
+.node .ico{font-size:2rem;width:56px;height:56px;display:grid;place-items:center;border-radius:16px;
+  background:linear-gradient(135deg,rgba(123,63,242,.5),rgba(255,77,141,.4));flex:none}
+.node h3{margin:0;font-size:1.12rem}
+.node p{margin:2px 0 0;font-size:.85rem;color:var(--muted)}
+.node .state{margin-left:auto;font-size:1.4rem;flex:none}
+.node.locked{opacity:.5;cursor:not-allowed}
+.node.locked:hover{transform:none}
+.node.done{border-color:rgba(40,209,124,.6);box-shadow:0 0 0 1px rgba(40,209,124,.25) inset}
+.node.current{border-color:var(--cyan);box-shadow:0 0 24px rgba(37,224,224,.28)}
+.connector{height:18px;margin:-6px 0 -6px 44px;border-left:3px dotted var(--card-bd)}
+
+/* ===== INTRO MISI ===== */
+.intro{text-align:center;padding:34px 20px}
+.intro .tag{display:inline-block;font-weight:800;letter-spacing:2px;color:var(--orange);font-size:.8rem}
+.intro .organ{font-size:clamp(4rem,20vw,7rem);animation:bob 3s ease-in-out infinite;display:inline-block;margin:6px 0}
+.intro h2{font-size:clamp(1.6rem,6vw,2.4rem);margin:.2rem 0}
+.narasi{max-width:62ch;margin:12px auto;font-size:1.03rem;line-height:1.65;color:var(--ink);
+  border-left:4px solid var(--pink);padding:10px 0 10px 16px;text-align:left;background:rgba(255,77,141,.07);border-radius:0 14px 14px 0}
+.materi{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 18px}
+.pill{background:rgba(37,224,224,.14);border:1px solid rgba(37,224,224,.4);color:var(--ink);
+  padding:6px 13px;border-radius:99px;font-size:.86rem;font-weight:700}
+
+/* ===== SOAL ===== */
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.qnum{font-weight:800;color:var(--cyan);font-size:.9rem}
+.timer{display:flex;align-items:center;gap:8px;font-weight:800}
+.tbar{width:110px;height:9px;border-radius:99px;background:rgba(0,0,0,.25);overflow:hidden}
+.tbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--orange))}
+.timer.warn{color:var(--pink);animation:pulse .5s infinite}
+.qtext{font-size:clamp(1.05rem,3.6vw,1.3rem);font-weight:700;line-height:1.55;margin:6px 0 16px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:14px 16px;border-radius:16px;
+  background:var(--card);border:1.5px solid var(--card-bd);color:var(--ink);font-size:1rem;font-weight:600;cursor:pointer;
+  transition:transform .14s,border-color .14s,background .14s}
+.opt:hover:not(:disabled){transform:translateY(-2px);border-color:var(--violet)}
+.opt .key{flex:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-weight:800;
+  background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff}
+.opt.right{border-color:var(--green);background:rgba(40,209,124,.18)}
+.opt.wrong{border-color:var(--pink);background:rgba(255,77,141,.16);animation:shake .4s}
+.opt:disabled{cursor:default;opacity:.9}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.opts.tf{grid-template-columns:1fr 1fr}
+.opts.grid2{grid-template-columns:1fr 1fr}
+@media(max-width:520px){.opts.grid2{grid-template-columns:1fr}}
+.silhouette{font-size:4.6rem;text-align:center;filter:brightness(.35) drop-shadow(0 0 16px var(--cyan));margin:6px 0 14px;animation:bob 3s infinite}
+
+/* matching */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcol{display:grid;gap:10px;align-content:start}
+.mcard{padding:13px;border-radius:14px;background:var(--card);border:1.5px solid var(--card-bd);
+  font-weight:700;font-size:.92rem;cursor:pointer;color:var(--ink);text-align:left;transition:transform .14s}
+.mcard:hover:not(:disabled){transform:scale(1.02);border-color:var(--violet)}
+.mcard.sel{border-color:var(--cyan);box-shadow:0 0 16px rgba(37,224,224,.4)}
+.mcard.paired{border-color:var(--orange);background:rgba(255,159,46,.14)}
+.mcard.paired::after{content:attr(data-tag);float:right;font-size:.75rem;color:var(--orange)}
+.mcard.right{border-color:var(--green);background:rgba(40,209,124,.18)}
+.mcard.wrong{border-color:var(--pink);background:rgba(255,77,141,.16)}
+
+/* ordering */
+.order{display:grid;gap:8px}
+.oitem{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:14px;background:var(--card);
+  border:1.5px solid var(--card-bd);font-weight:700;cursor:grab;user-select:none}
+.oitem.sel{border-color:var(--cyan)}
+.oitem .grip{color:var(--muted)}
+.oitem .arrows{margin-left:auto;display:flex;gap:6px}
+.oitem .arrows button{width:34px;height:34px;border-radius:10px;border:1px solid var(--card-bd);
+  background:rgba(255,255,255,.08);color:var(--ink);font-weight:800;cursor:pointer;font-size:1rem}
+.oitem.right{border-color:var(--green);background:rgba(40,209,124,.16)}
+.oitem.wrong{border-color:var(--pink);background:rgba(255,77,141,.14)}
+
+/* feedback */
+.fb{margin-top:16px;padding:16px;border-radius:18px;border:1.5px solid;animation:fadeUp .3s ease both}
+.fb.ok{border-color:var(--green);background:rgba(40,209,124,.13)}
+.fb.no{border-color:var(--pink);background:rgba(255,77,141,.12)}
+.fb h3{margin:0 0 6px;font-size:1.3rem}
+.fb p{margin:0 0 12px;line-height:1.6;font-size:.97rem}
+.hintbox{margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(255,159,46,.14);
+  border:1px dashed var(--orange);font-size:.94rem;line-height:1.55}
+
+/* boss */
+.bosswrap{text-align:center;margin-bottom:12px}
+.bossface{font-size:3.4rem;display:inline-block;animation:bob 2s infinite}
+.bosshp{font-size:1.5rem;letter-spacing:4px}
+.boss-hit{animation:shake .4s}
+
+/* mission complete */
+.complete{text-align:center;padding:30px 20px}
+.complete .trophy{font-size:5rem;animation:rise .8s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes rise{from{transform:translateY(60px) scale(.4);opacity:0}to{transform:none;opacity:1}}
+.badge-pop{display:inline-flex;flex-direction:column;align-items:center;gap:6px;padding:16px 22px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(255,159,46,.25),rgba(255,77,141,.25));border:1px solid var(--orange);margin:12px 0;
+  animation:flip .9s ease both}
+@keyframes flip{from{transform:rotateY(90deg) scale(.7);opacity:0}to{transform:none;opacity:1}}
+.badge-pop .b{font-size:2.6rem}
+
+/* result */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:16px 0}
+.stat{background:var(--card);border:1px solid var(--card-bd);border-radius:16px;padding:14px;text-align:center}
+.stat b{display:block;font-family:var(--font-h);font-size:1.7rem;line-height:1.1}
+.stat small{color:var(--muted);font-weight:700;font-size:.78rem}
+.rank{text-align:center;padding:18px;border-radius:20px;margin:8px 0 4px;
+  background:linear-gradient(135deg,rgba(255,159,46,.22),rgba(123,63,242,.25));border:1px solid var(--orange)}
+.rank .r{font-family:var(--font-h);font-size:clamp(1.4rem,5.5vw,2.1rem)}
+
+/* badges & leaderboard */
+.badgegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px}
+.bcard{text-align:center;padding:16px 10px;border-radius:18px;background:var(--card);border:1px solid var(--card-bd)}
+.bcard .b{font-size:2.4rem;display:block}
+.bcard.off{opacity:.32;filter:grayscale(1)}
+.bcard small{display:block;color:var(--muted);font-size:.75rem;margin-top:4px}
+.lb{display:grid;gap:8px}
+.lrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--card-bd)}
+.lrow .pos{font-family:var(--font-h);font-size:1.2rem;width:34px;flex:none;text-align:center}
+.lrow .sc{margin-left:auto;font-weight:800;color:var(--cyan)}
+.lrow.me{border-color:var(--cyan);box-shadow:0 0 18px rgba(37,224,224,.25)}
+
+/* review */
+.rev{border-radius:16px;padding:14px;margin-bottom:10px;border-left:6px solid;background:var(--card);border-top:1px solid var(--card-bd);border-right:1px solid var(--card-bd);border-bottom:1px solid var(--card-bd)}
+.rev.ok{border-left-color:var(--green)}
+.rev.no{border-left-color:var(--pink)}
+.rev .qt{font-weight:800;margin:0 0 8px;line-height:1.5}
+.rev .ln{font-size:.92rem;margin:3px 0}
+.rev .exp{margin-top:8px;font-size:.92rem;color:var(--muted);line-height:1.6}
+.tone-ok{color:var(--green);font-weight:800}
+.tone-no{color:var(--pink);font-weight:800}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;
+  background:rgba(5,3,25,.72);backdrop-filter:blur(6px)}
+.modal.open{display:flex;animation:fadeUp .25s ease both}
+.modal .box{max-width:520px;width:100%;max-height:88dvh;overflow:auto;background:linear-gradient(160deg,#221563,#150d40);
+  border:1px solid var(--card-bd);border-radius:24px;padding:24px;box-shadow:var(--shadow)}
+html[data-theme="light"] .modal .box{background:linear-gradient(160deg,#ffffff,#eef1ff)}
+.modal h2{margin-top:0}
+.rule{display:flex;gap:12px;align-items:flex-start;margin:10px 0;font-size:.96rem;line-height:1.5}
+.rule .e{font-size:1.3rem;flex:none}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--card-bd)}
+.setrow:last-of-type{border-bottom:0}
+.switch{width:56px;height:31px;border-radius:99px;border:1px solid var(--card-bd);background:rgba(0,0,0,.3);position:relative;cursor:pointer;flex:none}
+.switch i{position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;background:var(--muted);transition:.2s}
+.switch.on{background:linear-gradient(90deg,var(--violet),var(--green))}
+.switch.on i{left:29px;background:#fff}
+.section-title{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+.section-title h2{margin:0;font-size:clamp(1.35rem,5vw,1.9rem)}
+.center{text-align:center}
+.mt{margin-top:18px}
+.floatbtns{position:fixed;right:14px;bottom:14px;z-index:30;display:flex;flex-direction:column;gap:8px}
+.floatbtns button{width:52px;height:52px;border-radius:16px;border:1px solid var(--card-bd);background:var(--card);
+  color:var(--ink);font-size:1.25rem;cursor:pointer;backdrop-filter:blur(8px);box-shadow:var(--shadow)}
+.floatbtns button:hover{transform:scale(1.07)}
+input[type=text],select{width:100%;padding:14px 16px;border-radius:15px;border:1.5px solid var(--card-bd);
+  background:rgba(0,0,0,.22);color:var(--ink);font-size:1.05rem;font-family:inherit;font-weight:700}
+html[data-theme="light"] input[type=text],html[data-theme="light"] select{background:#fff}
+input[type=text]:focus,select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 16px rgba(37,224,224,.28)}
+label.lbl{display:block;font-weight:800;margin:14px 0 7px;font-size:.95rem}
+.chips{display:flex;gap:10px}
+.chip{flex:1;padding:13px;border-radius:15px;border:1.5px solid var(--card-bd);background:var(--card);
+  color:var(--ink);font-weight:800;cursor:pointer;font-family:var(--font-h);font-size:1rem}
+.chip.on{border-color:var(--cyan);background:rgba(37,224,224,.18)}
+.warn{color:var(--pink);font-weight:800;margin-top:10px;display:none}
+.warn.show{display:block;animation:shake .4s}
+.scorepop{position:fixed;left:50%;top:38%;transform:translateX(-50%);z-index:95;font-family:var(--font-h);
+  font-size:2.6rem;color:var(--green);text-shadow:0 4px 18px rgba(0,0,0,.5);pointer-events:none;animation:pop 1s ease both}
+@keyframes pop{0%{transform:translate(-50%,20px) scale(.6);opacity:0}30%{transform:translate(-50%,0) scale(1.1);opacity:1}100%{transform:translate(-50%,-50px) scale(1);opacity:0}}
+footer.tiny{text-align:center;color:var(--muted);font-size:.78rem;margin-top:26px}
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+<canvas id="confetti"></canvas>
+
+<div class="wrap">
+
+<!-- ================= HOME ================= -->
+<section id="screen-home" class="screen active">
+  <div class="home">
+    <div class="hero"><span>🧬</span><span>🫀</span><span>🥣</span><span>🔬</span></div>
+    <h1>DIGESTIVE ADVENTURE</h1>
+    <div class="sub">Petualangan Menjelajahi Sistem Pencernaan Manusia</div>
+    <p class="lead">Bersiaplah memasuki tubuh manusia dan menyelesaikan berbagai misi untuk menjadi Master Sistem Pencernaan!</p>
+
+    <div id="resumeBox" class="card resume" style="display:none;max-width:440px">
+      <p style="margin:0 0 12px"><b>Petualangan sebelumnya ditemukan.</b><br><span id="resumeInfo" style="color:var(--muted);font-size:.92rem"></span></p>
+      <div class="btn-row">
+        <button class="btn green" onclick="resumeGame()">▶ Lanjutkan petualangan</button>
+        <button class="btn ghost" onclick="freshStart()">🔄 Mulai dari awal</button>
+      </div>
+    </div>
+
+    <button class="btn big" style="margin-top:6px" onclick="go('screen-identity')">▶ MULAI PETUALANGAN</button>
+    <div class="btn-row" style="margin-top:6px">
+      <button class="btn ghost" onclick="openModal('modal-help')">📖 Petunjuk</button>
+      <button class="btn ghost" onclick="showLeaderboard()">🏆 Papan skor</button>
+      <button class="btn ghost" onclick="showBadges()">🏅 Badge</button>
+      <button class="btn ghost" id="musicBtn" onclick="toggleMusic()">🔊 Musik: on</button>
+      <button class="btn ghost" onclick="openModal('modal-set')">⚙️ Pengaturan</button>
+    </div>
+    <footer class="tiny">Materi IPA SMP Kelas VIII · Sistem Pencernaan Manusia</footer>
+  </div>
+</section>
+
+<!-- ================= IDENTITAS ================= -->
+<section id="screen-identity" class="screen">
+  <div class="card" style="max-width:480px;margin:8vh auto 0">
+    <div class="section-title"><span style="font-size:1.8rem">👤</span><h2>Identitas petualang</h2></div>
+    <label class="lbl" for="pname">Nama petualang</label>
+    <input id="pname" type="text" maxlength="20" placeholder="Tulis namamu di sini" autocomplete="off">
+    <label class="lbl">Kelas</label>
+    <div class="chips">
+      <button class="chip" data-k="VII" onclick="pickClass(this)">VII</button>
+      <button class="chip on" data-k="VIII" onclick="pickClass(this)">VIII</button>
+      <button class="chip" data-k="IX" onclick="pickClass(this)">IX</button>
+    </div>
+    <p class="warn" id="nameWarn">⚠️ Masukkan nama petualang terlebih dahulu!</p>
+    <div class="btn-row mt">
+      <button class="btn big green" onclick="startGame()">🚀 MULAI MISI</button>
+      <button class="btn ghost" onclick="go('screen-home')">⬅️ Kembali</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WELCOME ================= -->
+<section id="screen-welcome" class="screen">
+  <div class="card center" style="max-width:560px;margin:10vh auto 0;padding:34px 22px">
+    <div style="font-size:4.4rem" class="hero"><span>🧭</span></div>
+    <h2 id="welcomeText" style="line-height:1.4"></h2>
+    <p style="color:var(--muted)">Perjalananmu dimulai dari mulut dan berakhir di anus. Enam misi menanti sebelum kamu berhadapan dengan Final Boss.</p>
+    <button class="btn big" onclick="showMap()">🗺️ Buka peta petualangan</button>
+  </div>
+</section>
+
+<!-- ================= PETA ================= -->
+<section id="screen-map" class="screen">
+  <div id="hudMap"></div>
+  <div class="section-title"><span style="font-size:1.7rem">🗺️</span><h2>Peta petualangan</h2></div>
+  <div id="mapList" class="map-list"></div>
+  <div class="btn-row mt">
+    <button class="btn ghost" onclick="showBadges()">🏅 Badge</button>
+    <button class="btn ghost" onclick="showLeaderboard()">🏆 Papan skor</button>
+    <button class="btn ghost" onclick="openModal('modal-set')">⚙️ Pengaturan</button>
+    <button class="btn ghost" onclick="confirmHome()">🏠 Menu utama</button>
+  </div>
+</section>
+
+<!-- ================= INTRO MISI ================= -->
+<section id="screen-intro" class="screen">
+  <div class="card intro" id="introCard"></div>
+</section>
+
+<!-- ================= BERMAIN ================= -->
+<section id="screen-play" class="screen">
+  <div id="hudPlay"></div>
+  <div id="bossPanel" class="card bosswrap" style="display:none;margin-bottom:12px">
+    <div class="bossface" id="bossFace">🦠</div>
+    <h3 style="margin:4px 0">THE DIGESTIVE MASTER CHALLENGE</h3>
+    <div class="bosshp" id="bossHp">❤️❤️❤️❤️❤️</div>
+  </div>
+  <div class="card">
+    <div class="qhead">
+      <span class="qnum" id="qNum">Soal 1</span>
+      <div class="timer" id="timerWrap"><span>⏱️</span><span id="tNum">30</span><div class="tbar"><i id="tBar"></i></div></div>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div id="qBody"></div>
+    <div id="qExtra"></div>
+    <div class="btn-row" style="justify-content:flex-start;margin-top:14px" id="qTools">
+      <button class="btn ghost" id="hintBtn" onclick="useHint()">💡 Petunjuk (-25)</button>
+      <button class="btn ghost" onclick="openModal('modal-pause')">⏸️ Pause</button>
+    </div>
+    <div id="qFeedback"></div>
+  </div>
+</section>
+
+<!-- ================= MISI SELESAI ================= -->
+<section id="screen-complete" class="screen">
+  <div class="card complete" id="completeCard"></div>
+</section>
+
+<!-- ================= GAME OVER ================= -->
+<section id="screen-over" class="screen">
+  <div class="card center" style="max-width:520px;margin:8vh auto 0;padding:34px 22px">
+    <div style="font-size:4.4rem">🫧</div>
+    <h2>Nyawamu habis</h2>
+    <p style="color:var(--muted);line-height:1.6">Petualanganmu belum berakhir. Pelajari kembali materinya, lalu coba sekali lagi — organ pencernaan menunggumu.</p>
+    <div class="stats" id="overStats"></div>
+    <div class="btn-row">
+      <button class="btn green" onclick="retryMission()">🔄 Coba lagi</button>
+      <button class="btn orange" onclick="openModal('modal-materi')">📖 Pelajari materi</button>
+      <button class="btn ghost" onclick="goHomeReset()">🏠 Menu utama</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HASIL ================= -->
+<section id="screen-result" class="screen">
+  <div class="card center" id="resultCard"></div>
+</section>
+
+<!-- ================= PEMBAHASAN ================= -->
+<section id="screen-review" class="screen">
+  <div class="section-title"><span style="font-size:1.6rem">📖</span><h2>Pembahasan soal</h2></div>
+  <div id="reviewList"></div>
+  <div class="btn-row mt">
+    <button class="btn" onclick="go('screen-result')">🏆 Kembali ke hasil</button>
+    <button class="btn ghost" onclick="goHomeReset()">🏠 Menu utama</button>
+  </div>
+</section>
+
+<!-- ================= BADGE ================= -->
+<section id="screen-badges" class="screen">
+  <div class="section-title"><span style="font-size:1.6rem">🏅</span><h2>Koleksi badge</h2></div>
+  <div id="badgeGrid" class="badgegrid"></div>
+  <div class="btn-row mt"><button class="btn ghost" onclick="backSmart()">⬅️ Kembali</button></div>
+</section>
+
+<!-- ================= LEADERBOARD ================= -->
+<section id="screen-lb" class="screen">
+  <div class="section-title"><span style="font-size:1.6rem">🏆</span><h2>Papan skor</h2></div>
+  <div id="lbList" class="lb"></div>
+  <div class="btn-row mt">
+    <button class="btn ghost" onclick="backSmart()">⬅️ Kembali</button>
+    <button class="btn ghost" onclick="clearLb()">🗑️ Hapus papan skor</button>
+  </div>
+</section>
+
+</div>
+
+<!-- ================= FLOATING ================= -->
+<div class="floatbtns">
+  <button title="Musik" onclick="toggleMusic()" id="fMusic">🔊</button>
+  <button title="Layar penuh" onclick="toggleFull()">🖥️</button>
+</div>
+
+<!-- ================= MODALS ================= -->
+<div class="modal" id="modal-help"><div class="box">
+  <h2>📖 Cara bermain</h2>
+  <div class="rule"><span class="e">🧭</span><span>Jelajahi seluruh organ sistem pencernaan, dari mulut sampai anus.</span></div>
+  <div class="rule"><span class="e">🎯</span><span>Setiap organ punya beberapa tantangan yang harus diselesaikan.</span></div>
+  <div class="rule"><span class="e">❤️</span><span>Kamu punya 3 nyawa. Jawaban salah mengurangi 1 nyawa.</span></div>
+  <div class="rule"><span class="e">⭐</span><span>Jawaban benar memberi 100 poin, plus bonus kecepatan bila timer aktif.</span></div>
+  <div class="rule"><span class="e">🔥</span><span>Benar berturut-turut menghasilkan combo. Combo 5 memberi bonus 250 poin.</span></div>
+  <div class="rule"><span class="e">💡</span><span>Petunjuk boleh dipakai maksimal 2 kali per misi, masing-masing -25 poin.</span></div>
+  <div class="rule"><span class="e">🏆</span><span>Kalahkan Final Boss untuk menjadi Master Sistem Pencernaan.</span></div>
+  <div class="btn-row mt"><button class="btn" onclick="closeModal()">❌ Tutup</button></div>
+</div></div>
+
+<div class="modal" id="modal-set"><div class="box">
+  <h2>⚙️ Pengaturan</h2>
+  <div class="setrow"><span>🔊 Musik latar</span><div class="switch" id="sw-music" onclick="toggleSet('music')"><i></i></div></div>
+  <div class="setrow"><span>🔔 Efek suara</span><div class="switch" id="sw-sfx" onclick="toggleSet('sfx')"><i></i></div></div>
+  <div class="setrow"><span>⏱️ Timer soal</span><div class="switch" id="sw-timer" onclick="toggleSet('timer')"><i></i></div></div>
+  <div class="setrow"><span>🌙 Mode gelap</span><div class="switch" id="sw-dark" onclick="toggleSet('dark')"><i></i></div></div>
+  <div class="setrow"><span>🖥️ Layar penuh</span><button class="btn ghost" onclick="toggleFull()">Aktifkan</button></div>
+  <div class="btn-row mt"><button class="btn" onclick="closeModal()">❌ Tutup</button></div>
+</div></div>
+
+<div class="modal" id="modal-pause"><div class="box center">
+  <h2>⏸️ Game dijeda</h2>
+  <p style="color:var(--muted)">Ambil napas sebentar. Progresmu aman.</p>
+  <div class="btn-row">
+    <button class="btn green" onclick="closeModal()">▶ Lanjutkan</button>
+    <button class="btn orange" onclick="closeModal();retryMission()">🔄 Ulangi misi</button>
+    <button class="btn ghost" onclick="closeModal();openModal('modal-set')">⚙️ Pengaturan</button>
+    <button class="btn ghost" onclick="closeModal();showMap()">🗺️ Peta misi</button>
+    <button class="btn ghost" onclick="closeModal();confirmHome()">🏠 Menu utama</button>
+  </div>
+</div></div>
+
+<div class="modal" id="modal-materi"><div class="box">
+  <h2>📖 Ringkasan materi</h2>
+  <div id="materiBody"></div>
+  <div class="btn-row mt"><button class="btn" onclick="closeModal()">❌ Tutup</button></div>
+</div></div>
+
+<script>
+/* =========================================================
+   DATA MISI & SOAL
+   ========================================================= */
+const MISSIONS = [
+  {
+    id:"mulut", n:1, icon:"👄", title:"MULUT", sub:"Gerbang pertama pencernaan",
+    tag:"AREA BARU TERBUKA", teaser:"Perjalanan dimulai! Beranikah kamu masuk?",
+    narasi:"Petualangan dimulai! Makanan pertama kali masuk melalui mulut. Di sinilah proses pencernaan mekanik dan kimiawi dimulai bersamaan.",
+    materi:["Fungsi mulut","Gigi","Lidah","Kelenjar ludah","Enzim amilase (ptialin)","Pencernaan mekanik","Pencernaan kimiawi"],
+    badge:{icon:"👄",name:"Mouth Explorer"},
+    q:[
+      {type:"mc",q:"Enzim yang terdapat dalam air ludah dan mengubah amilum menjadi maltosa adalah…",
+       opts:["Amilase (ptialin)","Pepsin","Tripsin","Lipase"],ans:"Amilase (ptialin)",
+       hint:"Enzim ini bekerja pada karbohidrat, bukan protein atau lemak.",
+       exp:"Kelenjar ludah menghasilkan enzim amilase (ptialin) yang memecah amilum (karbohidrat) menjadi maltosa. Inilah pencernaan kimiawi pertama yang terjadi di tubuh."},
+      {type:"tf",q:"Mengunyah makanan dengan gigi termasuk contoh pencernaan kimiawi.",ans:false,
+       hint:"Perhatikan apakah proses itu melibatkan enzim atau hanya tenaga fisik.",
+       exp:"Mengunyah adalah pencernaan mekanik karena makanan hanya dihancurkan menjadi bagian lebih kecil tanpa mengubah susunan kimianya. Pencernaan kimiawi dilakukan oleh enzim."},
+      {type:"mc",q:"Andi makan nasi dengan terburu-buru tanpa mengunyah dengan baik. Apa akibat yang paling tepat dari kebiasaan tersebut?",
+       opts:["Lambung bekerja lebih keras karena makanan masih berukuran besar","Air ludah berhenti diproduksi sehingga mulut kering","Makanan langsung diserap di kerongkongan","Enzim pepsin tidak terbentuk di lambung"],
+       ans:"Lambung bekerja lebih keras karena makanan masih berukuran besar",
+       hint:"Mengunyah memperluas permukaan makanan agar enzim lebih mudah bekerja.",
+       exp:"Mengunyah memperkecil ukuran makanan sehingga luas permukaannya bertambah dan enzim bekerja lebih efektif. Jika makanan tertelan dalam potongan besar, organ berikutnya — terutama lambung — harus bekerja jauh lebih keras."},
+      {type:"mc",q:"Pasangan gigi dan fungsinya yang benar adalah…",
+       opts:["Gigi geraham — menghaluskan makanan","Gigi seri — merobek makanan","Gigi taring — memotong makanan","Gigi geraham — mengecap rasa"],
+       ans:"Gigi geraham — menghaluskan makanan",
+       hint:"Bentuk permukaan gigi menentukan tugasnya: lebar dan berlekuk untuk menggilas.",
+       exp:"Gigi seri memotong, gigi taring merobek, dan gigi geraham dengan permukaan lebar berlekuk berfungsi menggilas serta menghaluskan makanan."},
+      {type:"guess",organ:"👅",q:"Aku membantu mengatur letak makanan saat dikunyah, mendorong makanan ke kerongkongan, dan mengenali rasa. Siapakah aku?",
+       opts:["👅 Lidah","🦷 Gigi","💧 Kelenjar ludah","🛤️ Kerongkongan"],ans:"👅 Lidah",
+       hint:"Organ ini berotot, lentur, dan punya papila di permukaannya.",
+       exp:"Lidah mengatur posisi makanan, mencampurnya dengan ludah, mendorong bolus ke kerongkongan, dan mengecap rasa lewat papila."}
+    ]
+  },
+  {
+    id:"kerongkongan", n:2, icon:"🛤️", title:"KERONGKONGAN", sub:"Lorong menuju lambung",
+    tag:"AREA BARU TERBUKA", teaser:"Ikuti bolus menuruni lorong berotot ini.",
+    narasi:"Makanan telah berubah menjadi bolus. Sekarang makanan harus menuju lambung melalui kerongkongan sepanjang kurang lebih 25 cm.",
+    materi:["Fungsi kerongkongan","Gerak peristaltik","Perjalanan bolus"],
+    badge:{icon:"🛤️",name:"Peristaltic Rider"},
+    q:[
+      {type:"tf",q:"Gerak peristaltik membantu mendorong makanan di kerongkongan menuju lambung.",ans:true,
+       hint:"Otot dinding kerongkongan berkontraksi dan berelaksasi bergantian.",
+       exp:"Gerak peristaltik adalah gerakan meremas dan mendorong akibat kontraksi–relaksasi otot dinding saluran pencernaan, sehingga bolus terdorong menuju lambung."},
+      {type:"mc",q:"Bolus adalah…",
+       opts:["Gumpalan makanan hasil kunyahan yang bercampur ludah","Cairan asam yang dihasilkan lambung","Sisa makanan yang siap dikeluarkan","Enzim pemecah lemak dari pankreas"],
+       ans:"Gumpalan makanan hasil kunyahan yang bercampur ludah",
+       hint:"Bentuk ini terjadi tepat sebelum makanan ditelan.",
+       exp:"Bolus adalah gumpalan makanan halus hasil pencernaan di mulut yang telah bercampur air ludah sehingga mudah ditelan."},
+      {type:"mc",q:"Seorang astronot dapat menelan makanan dengan normal walau berada dalam kondisi tanpa gravitasi. Penjelasan yang paling tepat adalah…",
+       opts:["Makanan didorong oleh gerak peristaltik otot kerongkongan, bukan oleh gravitasi","Makanan jatuh ke lambung karena tarikan bumi","Kerongkongan menghasilkan enzim yang menarik makanan","Lambung menyedot makanan melalui tekanan udara"],
+       ans:"Makanan didorong oleh gerak peristaltik otot kerongkongan, bukan oleh gravitasi",
+       hint:"Pikirkan siapa yang sebenarnya menggerakkan makanan di dalam saluran.",
+       exp:"Makanan bergerak karena kontraksi otot kerongkongan (peristaltik), sehingga posisi tubuh maupun gravitasi tidak menghentikan proses menelan."},
+      {type:"tf",q:"Kerongkongan menghasilkan banyak enzim untuk mencerna protein.",ans:false,
+       hint:"Fungsi utama organ ini adalah menyalurkan, bukan mencerna.",
+       exp:"Kerongkongan tidak menghasilkan enzim pencernaan. Tugasnya menyalurkan bolus dari mulut ke lambung; lendirnya hanya membantu melicinkan jalan."}
+    ]
+  },
+  {
+    id:"lambung", n:3, icon:"🥣", title:"LAMBUNG", sub:"Wilayah paling asam",
+    tag:"ZONA BERBAHAYA", teaser:"Berani memasuki wilayah paling asam dalam perjalanan ini?",
+    narasi:"Hati-hati! Kamu memasuki wilayah dengan suasana sangat asam. Ini adalah lambung, tempat protein mulai dipecah dan kuman dilumpuhkan.",
+    materi:["Fungsi lambung","Asam klorida (HCl)","Pepsin","Pencernaan protein","Pencernaan mekanik lambung"],
+    badge:{icon:"🥣",name:"Stomach Survivor"},
+    q:[
+      {type:"mc",q:"Organ yang menghasilkan enzim pepsin adalah…",
+       opts:["Lambung","Mulut","Hati","Usus besar"],ans:"Lambung",
+       hint:"Organ ini berbentuk kantong dan terletak setelah kerongkongan.",
+       exp:"Dinding lambung menghasilkan pepsinogen yang diaktifkan HCl menjadi pepsin. Pepsin memecah protein menjadi pepton."},
+      {type:"mc",q:"Fungsi asam klorida (HCl) di lambung adalah…",
+       opts:["Membunuh kuman dan mengaktifkan pepsinogen menjadi pepsin","Menyerap air dari sisa makanan","Mengemulsikan lemak menjadi butiran kecil","Mengubah amilum menjadi maltosa"],
+       ans:"Membunuh kuman dan mengaktifkan pepsinogen menjadi pepsin",
+       hint:"Sifat asam kuat berguna untuk dua hal sekaligus: pertahanan dan pengaktifan enzim.",
+       exp:"HCl menciptakan suasana asam yang membunuh sebagian besar kuman dalam makanan sekaligus mengubah pepsinogen menjadi pepsin yang aktif."},
+      {type:"tf",q:"Di lambung hanya terjadi pencernaan kimiawi.",ans:false,
+       hint:"Dinding lambung memiliki lapisan otot yang tebal.",
+       exp:"Di lambung terjadi pencernaan kimiawi oleh HCl dan pepsin, sekaligus pencernaan mekanik karena otot dinding lambung meremas dan mengaduk makanan menjadi kim (chyme)."},
+      {type:"guess",organ:"🥣",q:"Aku berbentuk seperti kantong, terletak tepat setelah kerongkongan, dan suasanaku sangat asam. Siapakah aku?",
+       opts:["🥣 Lambung","🌀 Usus halus","🌿 Usus besar","🧪 Pankreas"],ans:"🥣 Lambung",
+       hint:"Organ ini menyimpan makanan sementara selama 2–4 jam.",
+       exp:"Lambung adalah kantong berotot dengan pH sangat rendah (asam) tempat makanan disimpan sementara sambil dicerna secara mekanik dan kimiawi."},
+      {type:"mc",q:"Rina sering telat makan dan merasa perih di perut bagian atas. Gangguan yang paling mungkin dialaminya adalah…",
+       opts:["Maag, karena asam lambung melukai dinding lambung","Konstipasi, karena air terlalu banyak diserap","Diare, karena infeksi bakteri di usus besar","Sariawan, karena kekurangan vitamin C"],
+       ans:"Maag, karena asam lambung melukai dinding lambung",
+       hint:"Gangguan ini berkaitan dengan produksi asam saat lambung kosong.",
+       exp:"Saat lambung kosong terlalu lama, asam lambung tetap diproduksi dan dapat mengiritasi dinding lambung. Kondisi ini dikenal sebagai maag (gastritis)."}
+    ]
+  },
+  {
+    id:"pendukung", n:4, icon:"🧪", title:"ORGAN PENDUKUNG", sub:"Hati · Kantung empedu · Pankreas",
+    tag:"LABORATORIUM TUBUH", teaser:"Tiga organ ini tidak dilalui makanan, tapi tanpa mereka pencernaan berantakan.",
+    narasi:"Makanan tidak melewati organ-organ ini, tetapi hasil kerjanya dialirkan ke usus halus. Inilah pabrik enzim dan cairan pencernaan tubuhmu.",
+    materi:["Hati menghasilkan empedu","Kantung empedu menyimpan empedu","Pankreas menghasilkan enzim","Emulsi lemak","Kelenjar pencernaan"],
+    badge:{icon:"🧪",name:"Enzyme Expert"},
+    q:[
+      {type:"match",q:"Pasangkan setiap organ dengan fungsinya yang tepat.",
+       pairs:[["🫀 Hati","Menghasilkan empedu"],["🟢 Kantung empedu","Menyimpan empedu"],["🧪 Pankreas","Menghasilkan enzim pencernaan"]],
+       hint:"Satu organ memproduksi, satu organ menyimpan, satu organ memasok banyak enzim sekaligus.",
+       exp:"Hati memproduksi empedu, kantung empedu menyimpan dan mengeluarkannya saat dibutuhkan, sedangkan pankreas menghasilkan enzim amilase, tripsin, dan lipase."},
+      {type:"mc",q:"Peran empedu dalam pencernaan adalah…",
+       opts:["Mengemulsikan lemak menjadi butiran halus","Memecah protein menjadi asam amino","Menyerap air dari sisa makanan","Mengubah amilum menjadi glukosa"],
+       ans:"Mengemulsikan lemak menjadi butiran halus",
+       hint:"Empedu bukan enzim, tetapi membuat kerja enzim lipase menjadi jauh lebih mudah.",
+       exp:"Empedu mengemulsikan lemak, yaitu memecah gumpalan lemak menjadi butiran kecil sehingga permukaannya luas dan enzim lipase dapat mencernanya dengan cepat."},
+      {type:"mc",q:"Enzim tripsin yang dihasilkan pankreas berfungsi…",
+       opts:["Memecah protein menjadi asam amino","Memecah lemak menjadi asam lemak","Mengubah amilum menjadi maltosa","Membunuh bakteri dalam makanan"],
+       ans:"Memecah protein menjadi asam amino",
+       hint:"Namanya mirip dengan enzim protein lain, yaitu pepsin.",
+       exp:"Pankreas menghasilkan tripsin (protein → asam amino), amilase (amilum → maltosa), dan lipase (lemak → asam lemak dan gliserol)."},
+      {type:"tf",q:"Hati termasuk saluran pencernaan yang dilalui makanan.",ans:false,
+       hint:"Bedakan saluran pencernaan dengan kelenjar pencernaan.",
+       exp:"Hati adalah kelenjar pencernaan, bukan saluran. Makanan tidak melewatinya; hati hanya mengirim empedu ke usus halus."},
+      {type:"mc",q:"Seorang pasien harus menjalani operasi pengangkatan kantung empedu. Ia lalu disarankan mengurangi makanan berlemak. Alasan yang paling tepat adalah…",
+       opts:["Empedu tidak dapat disimpan sehingga proses emulsi lemak menjadi kurang optimal","Tubuh berhenti memproduksi empedu selamanya","Lemak tidak dapat masuk ke usus halus lagi","Enzim pepsin ikut hilang bersama kantung empedu"],
+       ans:"Empedu tidak dapat disimpan sehingga proses emulsi lemak menjadi kurang optimal",
+       hint:"Hati tetap memproduksi empedu, yang hilang adalah tempat penyimpanannya.",
+       exp:"Tanpa kantung empedu, empedu menetes langsung ke usus halus dan tidak tersedia dalam jumlah besar saat makanan berlemak masuk, sehingga emulsi lemak kurang efektif."}
+    ]
+  },
+  {
+    id:"usushalus", n:5, icon:"🌀", title:"USUS HALUS", sub:"Pusat penyerapan tubuh",
+    tag:"AREA BARU TERBUKA", teaser:"Enam meter lorong berlipat menantimu.",
+    narasi:"Selamat datang di pusat penyerapan! Di sinilah sebagian besar sari makanan diserap tubuh melalui jutaan tonjolan kecil bernama vili.",
+    materi:["Duodenum","Jejunum","Ileum","Pencernaan kimiawi","Penyerapan sari makanan","Vili usus"],
+    badge:{icon:"🌀",name:"Absorption Master"},
+    q:[
+      {type:"mc",q:"Urutan bagian usus halus dari yang paling dekat lambung adalah…",
+       opts:["Duodenum – jejunum – ileum","Ileum – jejunum – duodenum","Jejunum – duodenum – ileum","Duodenum – ileum – jejunum"],
+       ans:"Duodenum – jejunum – ileum",
+       hint:"Duodenum disebut juga usus dua belas jari.",
+       exp:"Usus halus terdiri atas duodenum (usus dua belas jari), jejunum (usus kosong), lalu ileum (usus penyerapan)."},
+      {type:"mc",q:"🔬 Temukan vili! Struktur manakah yang berfungsi memperluas permukaan penyerapan di usus halus?",
+       opts:["Vili (jonjot usus) pada dinding usus halus","Otot melingkar pada dinding lambung","Kelenjar ludah di rongga mulut","Katup pada ujung rektum"],
+       ans:"Vili (jonjot usus) pada dinding usus halus",
+       hint:"Bentuknya seperti jutaan jari kecil yang menonjol ke dalam saluran.",
+       exp:"Vili adalah tonjolan halus mirip jari pada dinding usus halus. Jumlahnya sangat banyak sehingga luas permukaan penyerapan bertambah berkali-kali lipat."},
+      {type:"guess",organ:"🌀",q:"Aku panjangnya sekitar enam meter, berlipat-lipat, dan di tubuhku sebagian besar sari makanan diserap. Siapakah aku?",
+       opts:["🌀 Usus halus","🥣 Lambung","🌿 Usus besar","🛤️ Kerongkongan"],ans:"🌀 Usus halus",
+       hint:"Organ ini punya jutaan vili di dindingnya.",
+       exp:"Usus halus adalah tempat utama pencernaan kimiawi akhir sekaligus penyerapan sari makanan ke dalam pembuluh darah dan pembuluh getah bening."},
+      {type:"mc",q:"Mengapa usus halus dibuat sangat panjang dan berlipat-lipat di dalam rongga perut?",
+       opts:["Agar luas permukaan penyerapan sari makanan menjadi sangat besar","Agar makanan lebih cepat keluar dari tubuh","Agar asam lambung tidak masuk ke usus","Agar makanan dapat disimpan berhari-hari"],
+       ans:"Agar luas permukaan penyerapan sari makanan menjadi sangat besar",
+       hint:"Prinsipnya sama dengan alasan adanya vili.",
+       exp:"Panjang, lipatan dinding, vili, dan mikrovili semuanya bekerja untuk satu tujuan: memperluas permukaan agar penyerapan sari makanan berlangsung maksimal."},
+      {type:"tf",q:"Hasil penyerapan berupa asam amino dan glukosa diangkut oleh pembuluh darah.",ans:true,
+       hint:"Ingat perbedaan jalur zat larut air dan zat larut lemak.",
+       exp:"Glukosa dan asam amino larut dalam air sehingga diserap pembuluh darah pada vili, sedangkan asam lemak dan gliserol diangkut pembuluh getah bening."}
+    ]
+  },
+  {
+    id:"ususbesar", n:6, icon:"🌿", title:"USUS BESAR", sub:"Etape terakhir perjalanan",
+    tag:"AREA TERAKHIR", teaser:"Satu langkah lagi menuju Final Boss.",
+    narasi:"Petualangan hampir selesai! Sisa makanan telah memasuki usus besar. Di sini air diserap kembali dan feses dibentuk sebelum dikeluarkan.",
+    materi:["Penyerapan air","Pembentukan feses","Bakteri Escherichia coli","Rektum","Anus","Urutan jalannya makanan"],
+    badge:{icon:"🌿",name:"Colon Champion"},
+    q:[
+      {type:"mc",q:"Fungsi utama usus besar adalah…",
+       opts:["Menyerap air dan garam mineral dari sisa makanan","Menyerap seluruh sari makanan","Menghasilkan enzim pepsin","Mengemulsikan lemak"],
+       ans:"Menyerap air dan garam mineral dari sisa makanan",
+       hint:"Perhatikan mengapa feses berbentuk padat, bukan cair.",
+       exp:"Usus besar menyerap kembali air dan garam mineral dari sisa pencernaan, sehingga sisa makanan memadat menjadi feses."},
+      {type:"mc",q:"Bakteri Escherichia coli di usus besar membantu tubuh dengan cara…",
+       opts:["Membusukkan sisa makanan dan menghasilkan vitamin K","Memecah protein menjadi pepton","Menyerap glukosa ke pembuluh darah","Menghasilkan asam lambung"],
+       ans:"Membusukkan sisa makanan dan menghasilkan vitamin K",
+       hint:"Bakteri ini termasuk bakteri baik yang hidup bersama kita.",
+       exp:"E. coli membantu proses pembusukan sisa makanan dan menghasilkan vitamin K yang berperan dalam pembekuan darah."},
+      {type:"order",q:"Urutkan jalannya makanan di dalam sistem pencernaan!",
+       items:["Mulut","Kerongkongan","Lambung","Usus halus","Usus besar","Rektum","Anus"],
+       hint:"Mulai dari tempat makanan masuk, akhiri di tempat sisa makanan keluar.",
+       exp:"Jalur makanan: mulut → kerongkongan → lambung → usus halus → usus besar → rektum → anus. Hati, kantung empedu, dan pankreas tidak dilalui makanan karena termasuk kelenjar pencernaan."},
+      {type:"mc",q:"Beni jarang makan sayur dan kurang minum air. Ia mengalami kesulitan buang air besar karena feses menjadi keras. Gangguan ini disebut…",
+       opts:["Konstipasi, karena air terlalu banyak diserap usus besar","Diare, karena air kurang diserap usus besar","Maag, karena asam lambung berlebih","Apendisitis, karena radang umbai cacing"],
+       ans:"Konstipasi, karena air terlalu banyak diserap usus besar",
+       hint:"Feses keras berarti kandungan airnya terlalu sedikit.",
+       exp:"Konstipasi (sembelit) terjadi ketika sisa makanan terlalu lama di usus besar sehingga airnya banyak terserap dan feses mengeras. Serat dan air cukup membantu mencegahnya."}
+    ]
+  }
+];
+
+const BOSS = [
+  {type:"mc",q:"Enzim yang berperan memecah lemak menjadi asam lemak dan gliserol adalah…",
+   opts:["Lipase","Pepsin","Amilase","Tripsin"],ans:"Lipase",
+   hint:"Namanya berasal dari kata lipid.",
+   exp:"Lipase dihasilkan pankreas dan memecah lemak menjadi asam lemak serta gliserol setelah lemak diemulsikan oleh empedu."},
+  {type:"tf",q:"Vili pada usus halus berfungsi memperluas permukaan penyerapan sari makanan.",ans:true,
+   hint:"Semakin luas permukaan, semakin banyak zat yang dapat diserap.",
+   exp:"Benar. Vili memperbesar luas permukaan dinding usus halus sehingga penyerapan sari makanan jauh lebih efisien."},
+  {type:"mc",q:"Pencernaan kimiawi pertama kali terjadi di…",
+   opts:["Mulut, oleh enzim amilase","Lambung, oleh pepsin","Usus halus, oleh tripsin","Kerongkongan, oleh peristaltik"],
+   ans:"Mulut, oleh enzim amilase",
+   hint:"Cari organ pertama yang sudah memiliki enzim.",
+   exp:"Pencernaan kimiawi dimulai di mulut ketika enzim amilase dalam air ludah memecah amilum menjadi maltosa."},
+  {type:"mc",q:"Organ berikut yang termasuk kelenjar pencernaan, bukan saluran pencernaan, adalah…",
+   opts:["Pankreas","Lambung","Usus halus","Kerongkongan"],ans:"Pankreas",
+   hint:"Kelenjar tidak dilalui makanan, hanya mengirim cairan atau enzim.",
+   exp:"Pankreas, hati, dan kantung empedu adalah kelenjar pencernaan. Makanan tidak melewatinya; mereka mengirimkan enzim dan empedu ke usus halus."},
+  {type:"mc",q:"Setelah makan makanan berlemak, urutan proses yang benar adalah…",
+   opts:["Empedu mengemulsikan lemak, lalu lipase memecahnya menjadi asam lemak dan gliserol",
+         "Lipase memecah lemak, lalu empedu menyerapnya ke darah",
+         "Pepsin memecah lemak, lalu HCl menyerapnya di lambung",
+         "Amilase memecah lemak, lalu usus besar menyerapnya"],
+   ans:"Empedu mengemulsikan lemak, lalu lipase memecahnya menjadi asam lemak dan gliserol",
+   hint:"Emulsi dulu, baru enzim bekerja.",
+   exp:"Empedu memecah gumpalan lemak menjadi butiran halus (emulsi), setelah itu enzim lipase mencernanya menjadi asam lemak dan gliserol yang siap diserap vili."}
+];
+
+const BADGES = [
+  {icon:"👄",name:"Mouth Explorer",id:"mulut"},
+  {icon:"🛤️",name:"Peristaltic Rider",id:"kerongkongan"},
+  {icon:"🥣",name:"Stomach Survivor",id:"lambung"},
+  {icon:"🧪",name:"Enzyme Expert",id:"pendukung"},
+  {icon:"🌀",name:"Absorption Master",id:"usushalus"},
+  {icon:"🌿",name:"Colon Champion",id:"ususbesar"},
+  {icon:"🏆",name:"Digestive System Master",id:"master"}
+];
+
+/* =========================================================
+   STATE
+   ========================================================= */
+const KEY="digestiveAdventure_v1";
+let S={
+  name:"",kelas:"VIII",score:0,lives:3,combo:0,bestCombo:0,
+  unlocked:1,completed:[],badges:[],answers:[],
+  settings:{music:true,sfx:true,timer:true,dark:true}
+};
+let mi=0, queue=[], qi=0, current=null, answered=false, retried=false,
+    hintsThisMission=0, hintShown=false, bossMode=false, bossHP=5,
+    timerId=null, timeLeft=30, lastScreen="screen-map";
+
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){
+  try{ const r=localStorage.getItem(KEY); if(r){ const o=JSON.parse(r); S=Object.assign(S,o); S.settings=Object.assign({music:true,sfx:true,timer:true,dark:true},o.settings||{}); } }catch(e){}
+}
+function lbGet(){ try{ return JSON.parse(localStorage.getItem(KEY+"_lb")||"[]"); }catch(e){ return []; } }
+function lbSet(a){ try{ localStorage.setItem(KEY+"_lb", JSON.stringify(a)); }catch(e){} }
+
+/* =========================================================
+   NAVIGASI
+   ========================================================= */
+function go(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(id!=="screen-badges"&&id!=="screen-lb") lastScreen=id;
+}
+function backSmart(){ go(lastScreen==="screen-badges"||lastScreen==="screen-lb"?"screen-home":lastScreen); }
+function confirmHome(){ stopTimer(); go("screen-home"); refreshResume(); }
+function goHomeReset(){ stopTimer(); go("screen-home"); refreshResume(); }
+
+function openModal(id){ document.getElementById(id).classList.add("open"); if(id==="modal-set") syncSwitches(); if(id==="modal-materi") fillMateri(); stopTimer(); }
+function closeModal(){
+  document.querySelectorAll(".modal").forEach(m=>m.classList.remove("open"));
+  if(document.getElementById("screen-play").classList.contains("active") && !answered) startTimer(true);
+}
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{ if(e.target===m) closeModal(); }));
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+
+/* =========================================================
+   IDENTITAS
+   ========================================================= */
+function pickClass(el){
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));
+  el.classList.add("on"); S.kelas=el.dataset.k; sfx("click");
+}
+function startGame(){
+  const v=document.getElementById("pname").value.trim();
+  if(!v){ document.getElementById("nameWarn").classList.add("show"); sfx("wrong"); return; }
+  document.getElementById("nameWarn").classList.remove("show");
+  S.name=v; S.score=0; S.lives=3; S.combo=0; S.bestCombo=0;
+  S.unlocked=1; S.completed=[]; S.badges=[]; S.answers=[];
+  save(); sfx("start");
+  document.getElementById("welcomeText").textContent="Selamat datang, "+S.name+"! Petualanganmu di dalam sistem pencernaan akan segera dimulai.";
+  go("screen-welcome");
+  startMusic();
+}
+function refreshResume(){
+  const box=document.getElementById("resumeBox");
+  if(S.name && (S.completed.length>0)){
+    box.style.display="block";
+    document.getElementById("resumeInfo").textContent=S.name+" · kelas "+S.kelas+" · "+S.completed.length+"/6 misi selesai · skor "+S.score;
+  } else box.style.display="none";
+}
+function resumeGame(){ startMusic(); showMap(); }
+function freshStart(){ S.completed=[];S.badges=[];S.answers=[];S.score=0;S.unlocked=1;S.lives=3;S.combo=0;S.bestCombo=0;save();refreshResume();go("screen-identity"); }
+
+/* =========================================================
+   HUD
+   ========================================================= */
+function hudHTML(){
+  const hearts=[0,1,2].map(i=>`<span class="heart ${i<S.lives?"":"lost"}">❤️</span>`).join("");
+  const done=S.completed.length, pct=Math.round((done/7)*100);
+  return `<div class="hud">
+    <div class="item"><small>PETUALANG</small>👤 ${escapeHtml(S.name||"-")}</div>
+    <div class="item"><small>SKOR</small>⭐ <span id="scoreVal">${S.score}</span></div>
+    <div class="item"><small>NYAWA</small>${hearts}</div>
+    <div class="item"><small>COMBO</small><span id="comboVal">🔥 x${S.combo}</span></div>
+    <div class="item"><small>MISI</small>🎯 ${Math.min(done+1,7)}/7</div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+  </div>`;
+}
+function updateHUD(){
+  document.getElementById("hudPlay").innerHTML=hudHTML();
+  document.getElementById("hudMap").innerHTML=hudHTML();
+}
+
+/* =========================================================
+   PETA
+   ========================================================= */
+function showMap(){
+  stopTimer(); updateHUD(); renderMap(); go("screen-map");
+}
+function renderMap(){
+  const list=document.getElementById("mapList"); list.innerHTML="";
+  MISSIONS.forEach((m,i)=>{
+    const done=S.completed.includes(m.id);
+    const open=i<S.unlocked;
+    const cur=open&&!done;
+    const div=document.createElement("div");
+    div.className="node "+(done?"done":open?(cur?"current":""):"locked");
+    div.innerHTML=`<div class="ico">${m.icon}</div>
+      <div><h3>Misi ${m.n} — ${m.title}</h3><p>${m.sub}</p></div>
+      <div class="state">${done?"✅":open?"🔓":"🔒"}</div>`;
+    if(open) div.onclick=()=>startMission(i);
+    else div.onclick=()=>{ sfx("wrong"); toast("Selesaikan misi sebelumnya dulu 🔒"); };
+    list.appendChild(div);
+    const c=document.createElement("div"); c.className="connector"; list.appendChild(c);
+  });
+  const allDone=MISSIONS.every(m=>S.completed.includes(m.id));
+  const boss=document.createElement("div");
+  boss.className="node "+(S.completed.includes("boss")?"done":allDone?"current":"locked");
+  boss.innerHTML=`<div class="ico">👑</div>
+    <div><h3>Final Mission — MASTER DIGESTIVE SYSTEM</h3><p>Boss battle: 5 pertanyaan campuran</p></div>
+    <div class="state">${S.completed.includes("boss")?"⭐":allDone?"⚔️":"🔒"}</div>`;
+  boss.onclick=()=>{ if(allDone) startBoss(); else { sfx("wrong"); toast("Selesaikan 6 misi dulu untuk membuka Final Boss ⚔️"); } };
+  list.appendChild(boss);
+}
+
+/* =========================================================
+   MISI
+   ========================================================= */
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function startMission(i){
+  mi=i; bossMode=false; const m=MISSIONS[i];
+  if(S.lives<=0) S.lives=3;
+  document.getElementById("introCard").innerHTML=`
+    <div class="tag">📍 ${m.tag}</div>
+    <div class="organ">${m.icon}</div>
+    <h2>MISI ${m.n} — ${m.title}</h2>
+    <p style="color:var(--muted);font-style:italic">“${m.teaser}”</p>
+    <div class="narasi">${m.narasi}</div>
+    <div class="materi">${m.materi.map(x=>`<span class="pill">${x}</span>`).join("")}</div>
+    <div class="btn-row">
+      <button class="btn big" onclick="beginQuestions()">⚔️ MULAI TANTANGAN</button>
+      <button class="btn ghost" onclick="showMap()">🗺️ Peta misi</button>
+    </div>`;
+  sfx("level"); go("screen-intro");
+}
+function beginQuestions(){
+  const m=MISSIONS[mi];
+  queue=shuffle(m.q); qi=0; hintsThisMission=0;
+  document.getElementById("bossPanel").style.display="none";
+  updateHUD(); renderQuestion(); go("screen-play");
+}
+function retryMission(){
+  S.lives=3; S.combo=0; save();
+  if(bossMode) startBoss(); else beginQuestions();
+}
+
+/* =========================================================
+   BOSS
+   ========================================================= */
+function startBoss(){
+  bossMode=true; bossHP=5; if(S.lives<=0) S.lives=3;
+  document.getElementById("introCard").innerHTML=`
+    <div class="tag">⚠️ FINAL BOSS</div>
+    <div class="organ">👑</div>
+    <h2>THE DIGESTIVE MASTER CHALLENGE</h2>
+    <p style="color:var(--muted);font-style:italic">“Kamu sudah menjelajahi seluruh saluran pencernaan. Buktikan bahwa kamu benar-benar memahaminya.”</p>
+    <div class="narasi">Lima pertanyaan campuran menantimu. Setiap jawaban benar mengurangi 1 HP Boss. Habiskan seluruh HP-nya untuk menang!</div>
+    <div class="btn-row"><button class="btn big orange" onclick="beginBoss()">⚔️ HADAPI BOSS</button>
+    <button class="btn ghost" onclick="showMap()">🗺️ Peta misi</button></div>`;
+  sfx("level"); go("screen-intro");
+}
+function beginBoss(){
+  queue=shuffle(BOSS); qi=0; hintsThisMission=0;
+  document.getElementById("bossPanel").style.display="block";
+  drawBossHP(); updateHUD(); renderQuestion(); go("screen-play");
+}
+function drawBossHP(){
+  document.getElementById("bossHp").textContent="❤️".repeat(bossHP)+"🖤".repeat(5-bossHP);
+}
+
+/* =========================================================
+   RENDER SOAL
+   ========================================================= */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+function renderQuestion(){
+  answered=false; retried=false; hintShown=false;
+  current=queue[qi];
+  document.getElementById("qFeedback").innerHTML="";
+  document.getElementById("qExtra").innerHTML="";
+  document.getElementById("qTools").style.display="flex";
+  document.getElementById("qNum").textContent=(bossMode?"Boss — soal ":"Soal ")+(qi+1)+"/"+queue.length;
+  document.getElementById("qText").innerHTML=escapeHtml(current.q);
+  const hb=document.getElementById("hintBtn");
+  hb.disabled=hintsThisMission>=2; hb.style.opacity=hintsThisMission>=2?.45:1;
+  hb.textContent=hintsThisMission>=2?"💡 Petunjuk habis":"💡 Petunjuk (-25)";
+  const body=document.getElementById("qBody"); body.innerHTML="";
+
+  if(current.type==="mc"||current.type==="guess"){
+    if(current.type==="guess"){
+      const s=document.createElement("div"); s.className="silhouette"; s.textContent=current.organ; body.appendChild(s);
+    }
+    const opts=shuffle(current.opts);
+    const wrap=document.createElement("div");
+    wrap.className="opts"+(current.type==="guess"?" grid2":"");
+    opts.forEach((o,idx)=>{
+      const b=document.createElement("button");
+      b.className="opt"; b.type="button";
+      b.innerHTML=`<span class="key">${"ABCD"[idx]||"•"}</span><span>${escapeHtml(o)}</span>`;
+      b.onclick=()=>checkMC(b,o,wrap);
+      wrap.appendChild(b);
+    });
+    body.appendChild(wrap);
+  }
+  else if(current.type==="tf"){
+    const wrap=document.createElement("div"); wrap.className="opts tf";
+    [["✅ BENAR",true],["❌ SALAH",false]].forEach(([t,v])=>{
+      const b=document.createElement("button"); b.className="opt"; b.type="button";
+      b.style.justifyContent="center"; b.innerHTML=`<span style="font-weight:800">${t}</span>`;
+      b.onclick=()=>checkTF(b,v,wrap);
+      wrap.appendChild(b);
+    });
+    body.appendChild(wrap);
+  }
+  else if(current.type==="match"){ renderMatch(body); }
+  else if(current.type==="order"){ renderOrder(body); }
+
+  startTimer(false);
+}
+
+/* ---- MATCHING ---- */
+let matchSel=null, matchPairs={};
+function renderMatch(body){
+  matchSel=null; matchPairs={};
+  const left=current.pairs.map(p=>p[0]);
+  const right=shuffle(current.pairs.map(p=>p[1]));
+  const wrap=document.createElement("div"); wrap.className="match";
+  const cl=document.createElement("div"); cl.className="mcol";
+  const cr=document.createElement("div"); cr.className="mcol";
+  left.forEach(l=>{
+    const b=document.createElement("button"); b.className="mcard"; b.dataset.side="L"; b.dataset.val=l; b.textContent=l;
+    b.onclick=()=>pickMatch(b); cl.appendChild(b);
+  });
+  right.forEach(r=>{
+    const b=document.createElement("button"); b.className="mcard"; b.dataset.side="R"; b.dataset.val=r; b.textContent=r;
+    b.onclick=()=>pickMatch(b); cr.appendChild(b);
+  });
+  wrap.appendChild(cl); wrap.appendChild(cr); body.appendChild(wrap);
+  const info=document.createElement("p");
+  info.style.cssText="color:var(--muted);font-size:.86rem;margin:10px 0 0";
+  info.textContent="Ketuk kartu organ di kiri, lalu ketuk fungsinya di kanan.";
+  body.appendChild(info);
+  const btn=document.createElement("button"); btn.className="btn green"; btn.style.marginTop="12px";
+  btn.textContent="✅ Periksa jawaban"; btn.onclick=checkMatch;
+  document.getElementById("qExtra").appendChild(btn);
+}
+function pickMatch(b){
+  if(answered) return; sfx("click");
+  if(b.dataset.side==="L"){
+    document.querySelectorAll('.mcard[data-side="L"]').forEach(x=>x.classList.remove("sel"));
+    matchSel=b; b.classList.add("sel"); return;
+  }
+  if(!matchSel){ toast("Pilih organ di kolom kiri dulu"); return; }
+  const l=matchSel.dataset.val;
+  Object.keys(matchPairs).forEach(k=>{ if(matchPairs[k]===b.dataset.val) delete matchPairs[k]; });
+  matchPairs[l]=b.dataset.val;
+  redrawPairs();
+  matchSel=null;
+}
+function redrawPairs(){
+  const keys=Object.keys(matchPairs);
+  document.querySelectorAll(".mcard").forEach(c=>{ c.classList.remove("sel","paired"); c.removeAttribute("data-tag"); });
+  keys.forEach((l,i)=>{
+    const num=i+1;
+    document.querySelectorAll('.mcard[data-side="L"]').forEach(c=>{ if(c.dataset.val===l){ c.classList.add("paired"); c.dataset.tag="#"+num; } });
+    document.querySelectorAll('.mcard[data-side="R"]').forEach(c=>{ if(c.dataset.val===matchPairs[l]){ c.classList.add("paired"); c.dataset.tag="#"+num; } });
+  });
+}
+function checkMatch(){
+  if(answered) return;
+  if(Object.keys(matchPairs).length<current.pairs.length){ toast("Pasangkan semua kartu dulu ya"); sfx("wrong"); return; }
+  let ok=true;
+  current.pairs.forEach(([l,r])=>{ if(matchPairs[l]!==r) ok=false; });
+  document.querySelectorAll('.mcard[data-side="L"]').forEach(c=>{
+    const correct=current.pairs.find(p=>p[0]===c.dataset.val)[1];
+    c.classList.add(matchPairs[c.dataset.val]===correct?"right":"wrong");
+  });
+  const given=current.pairs.map(([l])=>l+" → "+(matchPairs[l]||"-")).join("; ");
+  finishAnswer(ok, given, current.pairs.map(p=>p[0]+" → "+p[1]).join("; "));
+}
+
+/* ---- ORDERING ---- */
+let orderArr=[];
+function renderOrder(body){
+  orderArr=shuffle(current.items);
+  const wrap=document.createElement("div"); wrap.className="order"; wrap.id="orderWrap";
+  body.appendChild(wrap); paintOrder();
+  const info=document.createElement("p");
+  info.style.cssText="color:var(--muted);font-size:.86rem;margin:10px 0 0";
+  info.textContent="Seret kartu, atau gunakan tombol ▲ ▼ untuk memindahkan urutan.";
+  body.appendChild(info);
+  const btn=document.createElement("button"); btn.className="btn green"; btn.style.marginTop="12px";
+  btn.textContent="✅ Periksa urutan"; btn.onclick=checkOrder;
+  document.getElementById("qExtra").appendChild(btn);
+}
+function paintOrder(){
+  const wrap=document.getElementById("orderWrap"); if(!wrap) return;
+  wrap.innerHTML="";
+  orderArr.forEach((t,i)=>{
+    const d=document.createElement("div");
+    d.className="oitem"; d.draggable=!answered; d.dataset.i=i;
+    d.innerHTML=`<span class="grip">⠿</span><span style="font-weight:800;color:var(--cyan)">${i+1}.</span><span>${escapeHtml(t)}</span>
+      <span class="arrows"><button type="button" onclick="moveItem(${i},-1)">▲</button><button type="button" onclick="moveItem(${i},1)">▼</button></span>`;
+    d.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",i); });
+    d.addEventListener("dragover",e=>e.preventDefault());
+    d.addEventListener("drop",e=>{
+      e.preventDefault(); const from=+e.dataTransfer.getData("text/plain");
+      const it=orderArr.splice(from,1)[0]; orderArr.splice(i,0,it); paintOrder(); sfx("click");
+    });
+    wrap.appendChild(d);
+  });
+}
+function moveItem(i,d){
+  if(answered) return;
+  const j=i+d; if(j<0||j>=orderArr.length) return;
+  [orderArr[i],orderArr[j]]=[orderArr[j],orderArr[i]]; paintOrder(); sfx("click");
+}
+function checkOrder(){
+  if(answered) return;
+  const ok=orderArr.every((v,i)=>v===current.items[i]);
+  document.querySelectorAll(".oitem").forEach((el,i)=>el.classList.add(orderArr[i]===current.items[i]?"right":"wrong"));
+  finishAnswer(ok, orderArr.join(" → "), current.items.join(" → "));
+}
+
+/* ---- MC / TF ---- */
+function checkMC(btn,val,wrap){
+  if(answered) return;
+  const ok=val===current.ans;
+  wrap.querySelectorAll(".opt").forEach(b=>{
+    b.disabled=true;
+    const txt=b.querySelector("span:last-child").textContent;
+    if(txt===current.ans) b.classList.add("right");
+  });
+  if(!ok) btn.classList.add("wrong");
+  finishAnswer(ok,val,current.ans,wrap);
+}
+function checkTF(btn,val,wrap){
+  if(answered) return;
+  const ok=val===current.ans;
+  wrap.querySelectorAll(".opt").forEach(b=>b.disabled=true);
+  const correctBtn=wrap.querySelectorAll(".opt")[current.ans?0:1];
+  correctBtn.classList.add("right");
+  if(!ok) btn.classList.add("wrong");
+  finishAnswer(ok, val?"BENAR":"SALAH", current.ans?"BENAR":"SALAH", wrap);
+}
+
+/* =========================================================
+   PENILAIAN
+   ========================================================= */
+function finishAnswer(ok, given, correct, wrap){
+  answered=true; stopTimer();
+  document.getElementById("qTools").style.display="none";
+  document.getElementById("qExtra").innerHTML="";
+
+  let gain=0;
+  if(ok){
+    gain=100;
+    if(S.settings.timer && timeLeft>20) gain+=20;
+    S.combo++; if(S.combo>S.bestCombo) S.bestCombo=S.combo;
+    if(S.combo===5){ gain+=250; }
+    S.score+=gain; sfx("correct"); confettiBurst(ok?60:0); popScore("+"+gain);
+    if(bossMode){ bossHP=Math.max(0,bossHP-1); drawBossHP();
+      const f=document.getElementById("bossFace"); f.classList.remove("boss-hit"); void f.offsetWidth; f.classList.add("boss-hit"); }
+  }else{
+    S.combo=0; S.lives--; sfx("wrong");
+  }
+  S.answers.push({q:current.q, given:given, correct:correct, ok:ok, exp:current.exp});
+  save(); updateHUD();
+  if(ok && S.combo>=2){ const c=document.getElementById("comboVal"); c.classList.add("combo-hot"); setTimeout(()=>c.classList.remove("combo-hot"),700); }
+
+  const fb=document.getElementById("qFeedback");
+  const comboMsg = ok && S.combo===5 ? `<p style="color:var(--orange);font-weight:800">⚡ SUPER COMBO! Bonus +250 poin</p>`
+                 : ok && S.combo>=2 ? `<p style="color:var(--orange);font-weight:800">🔥 Combo x${S.combo}!</p>` : "";
+  fb.innerHTML=`<div class="fb ${ok?"ok":"no"}">
+    <h3>${ok?"✅ BENAR!":"❌ BELUM TEPAT!"} ${ok?`<span style="color:var(--green)">+${gain} poin</span>`:""}</h3>
+    ${ok?"":`<p style="font-weight:800">Jawaban benar: ${escapeHtml(correct)}</p>`}
+    <p>${escapeHtml(current.exp)}</p>
+    ${comboMsg}
+    <div class="btn-row" style="justify-content:flex-start" id="fbBtns"></div>
+  </div>`;
+  const btns=document.getElementById("fbBtns");
+  if(S.lives<=0){
+    const b=document.createElement("button"); b.className="btn orange"; b.textContent="💀 Lihat hasil";
+    b.onclick=gameOver; btns.appendChild(b);
+  }else{
+    const b=document.createElement("button"); b.className="btn"; b.textContent="➡️ LANJUTKAN";
+    b.onclick=nextQuestion; btns.appendChild(b);
+  }
+}
+
+function nextQuestion(){
+  qi++;
+  if(qi<queue.length){ renderQuestion(); window.scrollTo({top:0,behavior:"smooth"}); }
+  else if(bossMode) finishBoss();
+  else missionComplete();
+}
+
+function timeOut(){
+  if(answered) return;
+  answered=true; stopTimer();
+  document.querySelectorAll(".opt,.mcard,.oitem").forEach(b=>b.disabled=true);
+  S.combo=0; S.lives--;
+  S.answers.push({q:current.q,given:"(waktu habis)",correct:answerText(current),ok:false,exp:current.exp});
+  save(); updateHUD(); sfx("wrong");
+  document.getElementById("qTools").style.display="none";
+  document.getElementById("qExtra").innerHTML="";
+  const fb=document.getElementById("qFeedback");
+  fb.innerHTML=`<div class="fb no"><h3>⏰ Waktu habis!</h3>
+    <p style="font-weight:800">Jawaban benar: ${escapeHtml(answerText(current))}</p>
+    <p>${escapeHtml(current.exp)}</p>
+    <div class="btn-row" style="justify-content:flex-start" id="fbBtns"></div></div>`;
+  const btns=document.getElementById("fbBtns");
+  const b=document.createElement("button");
+  if(S.lives<=0){ b.className="btn orange"; b.textContent="💀 Lihat hasil"; b.onclick=gameOver; }
+  else { b.className="btn"; b.textContent="➡️ LANJUTKAN"; b.onclick=nextQuestion; }
+  btns.appendChild(b);
+}
+function answerText(q){
+  if(q.type==="tf") return q.ans?"BENAR":"SALAH";
+  if(q.type==="match") return q.pairs.map(p=>p[0]+" → "+p[1]).join("; ");
+  if(q.type==="order") return q.items.join(" → ");
+  return q.ans;
+}
+
+/* ---- HINT ---- */
+function useHint(){
+  if(hintsThisMission>=2||answered||hintShown) return;
+  hintsThisMission++; hintShown=true; S.score=Math.max(0,S.score-25); save(); updateHUD(); sfx("click");
+  const d=document.createElement("div"); d.className="hintbox";
+  d.innerHTML="💡 <b>Petunjuk:</b> "+escapeHtml(current.hint);
+  document.getElementById("qExtra").appendChild(d);
+  const hb=document.getElementById("hintBtn");
+  hb.disabled=true; hb.style.opacity=.45;
+  hb.textContent=hintsThisMission>=2?"💡 Petunjuk habis":"💡 Petunjuk dipakai";
+}
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+function startTimer(resume){
+  stopTimer();
+  const w=document.getElementById("timerWrap");
+  if(!S.settings.timer){ w.style.display="none"; return; }
+  w.style.display="flex"; w.classList.remove("warn");
+  if(!resume) timeLeft=30;
+  paintTimer();
+  timerId=setInterval(()=>{
+    timeLeft--; paintTimer();
+    if(timeLeft<=5) w.classList.add("warn");
+    if(timeLeft<=0){ stopTimer(); timeOut(); }
+  },1000);
+}
+function paintTimer(){
+  document.getElementById("tNum").textContent=timeLeft;
+  document.getElementById("tBar").style.width=(timeLeft/30*100)+"%";
+}
+function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+
+/* =========================================================
+   MISI SELESAI / GAME OVER
+   ========================================================= */
+function missionComplete(){
+  const m=MISSIONS[mi];
+  if(!S.completed.includes(m.id)){
+    S.completed.push(m.id); S.score+=500;
+    if(!S.badges.includes(m.id)) S.badges.push(m.id);
+    if(S.unlocked<mi+2) S.unlocked=mi+2;
+  }
+  S.lives=3; save(); sfx("badge"); confettiBurst(110);
+  document.getElementById("completeCard").innerHTML=`
+    <div class="trophy">🎉</div>
+    <h2>MISSION COMPLETE!</h2>
+    <h3 style="color:var(--cyan);margin:.2rem 0">${m.icon} ${m.title} MASTERED!</h3>
+    <p style="font-size:1.2rem;font-weight:800;color:var(--green)">⭐ +500 poin</p>
+    <div class="badge-pop"><span class="b">${m.badge.icon}</span><b>Badge didapatkan</b><span>${m.badge.name}</span></div>
+    <div class="stats">
+      <div class="stat"><b>${S.score}</b><small>SKOR TOTAL</small></div>
+      <div class="stat"><b>${S.completed.length}/6</b><small>MISI SELESAI</small></div>
+      <div class="stat"><b>${S.bestCombo}</b><small>COMBO TERBAIK</small></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="showMap()">🗺️ Kembali ke peta</button>
+      ${nextMissionBtn()}
+    </div>`;
+  go("screen-complete");
+}
+function nextMissionBtn(){
+  const allDone=MISSIONS.every(m=>S.completed.includes(m.id));
+  if(allDone) return `<button class="btn orange" onclick="startBoss()">⚔️ Hadapi Final Boss</button>`;
+  return `<button class="btn green" onclick="startMission(${Math.min(mi+1,5)})">➡️ Misi berikutnya</button>`;
+}
+function gameOver(){
+  stopTimer(); sfx("over");
+  const total=S.answers.length, benar=S.answers.filter(a=>a.ok).length;
+  document.getElementById("overStats").innerHTML=`
+    <div class="stat"><b>${S.score}</b><small>SKOR</small></div>
+    <div class="stat"><b>${benar}/${total}</b><small>JAWABAN BENAR</small></div>
+    <div class="stat"><b>${S.completed.length}/6</b><small>MISI SELESAI</small></div>`;
+  go("screen-over");
+}
+
+/* =========================================================
+   FINAL
+   ========================================================= */
+function finishBoss(){
+  if(!S.completed.includes("boss")) S.completed.push("boss");
+  if(!S.badges.includes("master")) S.badges.push("master");
+  S.score+=500; save();
+  const won=bossHP<=0;
+  if(won){ confettiBurst(220); sfx("win"); }
+  const total=S.answers.length, benar=S.answers.filter(a=>a.ok).length;
+  const acc=total?Math.round(benar/total*100):0;
+  const rank=acc>=90?["👑","MASTER OF DIGESTIVE SYSTEM"]:acc>=75?["🥇","Digestive Expert"]:acc>=60?["🥈","Digestive Explorer"]:["🥉","Digestive Rookie"];
+  saveScore(acc);
+  document.getElementById("resultCard").innerHTML=`
+    ${won?`<h2 style="color:var(--orange)">💥 BOSS DEFEATED!</h2>`:`<h2>⚔️ Pertarungan selesai</h2>`}
+    <div class="trophy" style="font-size:5rem">🏆</div>
+    <h2>PETUALANGAN SELESAI!</h2>
+    <p style="font-size:1.1rem">Selamat, <b>${escapeHtml(S.name)}</b>! Kamu berhasil menjelajahi seluruh sistem pencernaan manusia.</p>
+    <div class="rank"><div style="font-size:2.6rem">${rank[0]}</div><div class="r">${rank[1]}</div></div>
+    <div class="stats">
+      <div class="stat"><b>${S.score}</b><small>SKOR AKHIR</small></div>
+      <div class="stat"><b>${benar}/${total}</b><small>JAWABAN BENAR</small></div>
+      <div class="stat"><b>${total-benar}</b><small>JAWABAN SALAH</small></div>
+      <div class="stat"><b>${acc}%</b><small>AKURASI</small></div>
+      <div class="stat"><b>${S.bestCombo}</b><small>COMBO TERBAIK</small></div>
+      <div class="stat"><b>${S.badges.length}/7</b><small>BADGE</small></div>
+    </div>
+    ${acc>=90?`<h3 style="color:var(--orange)">👑 PERFECT ADVENTURE!</h3>`:""}
+    <p style="color:var(--muted);max-width:60ch;margin:10px auto;line-height:1.65">Tubuh manusia adalah sistem yang luar biasa. Setiap organ pencernaan punya tugas yang saling berkaitan untuk mengolah makanan menjadi energi dan zat yang dibutuhkan tubuh.</p>
+    <div class="btn-row">
+      <button class="btn green" onclick="playAgain()">🔄 Main lagi</button>
+      <button class="btn" onclick="showReview()">📖 Lihat pembahasan</button>
+      <button class="btn ghost" onclick="showMap()">🗺️ Peta misi</button>
+      <button class="btn ghost" onclick="showBadges()">🏅 Badge</button>
+      <button class="btn ghost" onclick="showLeaderboard()">🏆 Papan skor</button>
+      <button class="btn orange" onclick="downloadResult()">📥 Unduh hasil</button>
+      <button class="btn ghost" onclick="goHomeReset()">🏠 Menu utama</button>
+    </div>`;
+  go("screen-result");
+}
+function playAgain(){
+  S.score=0;S.lives=3;S.combo=0;S.bestCombo=0;S.completed=[];S.badges=[];S.answers=[];S.unlocked=1;
+  save(); showMap();
+}
+
+/* ---- pembahasan ---- */
+function showReview(){
+  const el=document.getElementById("reviewList");
+  if(!S.answers.length){ el.innerHTML=`<div class="card">Belum ada soal yang dikerjakan.</div>`; go("screen-review"); return; }
+  el.innerHTML=S.answers.map((a,i)=>`
+    <div class="rev ${a.ok?"ok":"no"}">
+      <p class="qt">Soal ${i+1}. ${escapeHtml(a.q)}</p>
+      <p class="ln">Jawaban kamu: <span class="${a.ok?"tone-ok":"tone-no"}">${escapeHtml(a.given)} ${a.ok?"✅":"❌"}</span></p>
+      ${a.ok?"":`<p class="ln">Jawaban benar: <span class="tone-ok">${escapeHtml(a.correct)} ✅</span></p>`}
+      <p class="exp">📌 ${escapeHtml(a.exp)}</p>
+    </div>`).join("");
+  go("screen-review");
+}
+
+/* ---- badge ---- */
+function showBadges(){
+  lastScreen=document.querySelector(".screen.active").id;
+  document.getElementById("badgeGrid").innerHTML=BADGES.map(b=>`
+    <div class="bcard ${S.badges.includes(b.id)?"":"off"}">
+      <span class="b">${b.icon}</span><b>${b.name}</b>
+      <small>${S.badges.includes(b.id)?"Terbuka":"Belum terbuka"}</small>
+    </div>`).join("");
+  go("screen-badges");
+}
+
+/* ---- leaderboard ---- */
+function saveScore(acc){
+  const lb=lbGet();
+  lb.push({name:S.name||"Petualang",kelas:S.kelas,score:S.score,acc:acc,t:Date.now()});
+  lb.sort((a,b)=>b.score-a.score);
+  lbSet(lb.slice(0,10));
+}
+function showLeaderboard(){
+  lastScreen=document.querySelector(".screen.active").id;
+  const lb=lbGet(); const el=document.getElementById("lbList");
+  if(!lb.length){ el.innerHTML=`<div class="card center">Papan skor masih kosong. Selesaikan satu petualangan penuh untuk mengisinya.</div>`; }
+  else el.innerHTML=lb.map((r,i)=>`
+    <div class="lrow ${r.name===S.name&&r.score===S.score?"me":""}">
+      <span class="pos">${i===0?"🥇":i===1?"🥈":i===2?"🥉":i+1}</span>
+      <span><b>${escapeHtml(r.name)}</b><br><small style="color:var(--muted)">Kelas ${escapeHtml(r.kelas)} · akurasi ${r.acc}%</small></span>
+      <span class="sc">${r.score}</span>
+    </div>`).join("");
+  go("screen-lb");
+}
+function clearLb(){ lbSet([]); showLeaderboard(); toast("Papan skor dikosongkan"); }
+
+/* ---- unduh hasil ---- */
+function downloadResult(){
+  const total=S.answers.length, benar=S.answers.filter(a=>a.ok).length;
+  const acc=total?Math.round(benar/total*100):0;
+  const rank=acc>=90?"MASTER OF DIGESTIVE SYSTEM":acc>=75?"Digestive Expert":acc>=60?"Digestive Explorer":"Digestive Rookie";
+  const c=document.createElement("canvas"); c.width=800; c.height=1000; const x=c.getContext("2d");
+  const g=x.createLinearGradient(0,0,800,1000);
+  g.addColorStop(0,"#160c46"); g.addColorStop(.5,"#3b1c8f"); g.addColorStop(1,"#0d0b34");
+  x.fillStyle=g; x.fillRect(0,0,800,1000);
+  x.fillStyle="rgba(255,255,255,.08)"; roundRect(x,50,60,700,880,32); x.fill();
+  x.textAlign="center"; x.fillStyle="#25e0e0"; x.font="bold 34px Trebuchet MS, sans-serif";
+  x.fillText("DIGESTIVE ADVENTURE",400,140);
+  x.fillStyle="#ffffff"; x.font="20px Trebuchet MS, sans-serif";
+  x.fillText("Petualangan Sistem Pencernaan Manusia",400,175);
+  x.font="70px serif"; x.fillText("🏆",400,265);
+  x.fillStyle="#ff9f2e"; x.font="bold 40px Trebuchet MS, sans-serif"; x.fillText(S.name||"Petualang",400,330);
+  x.fillStyle="#b3aede"; x.font="20px Trebuchet MS, sans-serif"; x.fillText("Kelas "+S.kelas,400,362);
+  const rows=[["Skor akhir",String(S.score)],["Jawaban benar",benar+" / "+total],["Jawaban salah",String(total-benar)],
+              ["Akurasi",acc+"%"],["Combo terbaik",String(S.bestCombo)],["Badge",S.badges.length+" / 7"]];
+  let y=430;
+  rows.forEach(r=>{
+    x.fillStyle="rgba(255,255,255,.09)"; roundRect(x,100,y-32,600,58,16); x.fill();
+    x.textAlign="left"; x.fillStyle="#d9d4ff"; x.font="22px Trebuchet MS, sans-serif"; x.fillText(r[0],130,y+5);
+    x.textAlign="right"; x.fillStyle="#ffffff"; x.font="bold 26px Trebuchet MS, sans-serif"; x.fillText(r[1],670,y+5);
+    y+=76;
+  });
+  x.textAlign="center"; x.fillStyle="#28d17c"; x.font="bold 30px Trebuchet MS, sans-serif"; x.fillText(rank,400,y+30);
+  x.fillStyle="#8f89c9"; x.font="17px Trebuchet MS, sans-serif";
+  x.fillText(new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"}),400,930);
+  const a=document.createElement("a");
+  a.download="Hasil-Digestive-Adventure-"+(S.name||"petualang")+".png";
+  a.href=c.toDataURL("image/png"); a.click();
+  toast("Hasil diunduh sebagai gambar 📥");
+}
+function roundRect(ctx,x1,y1,w,h,r){
+  ctx.beginPath(); ctx.moveTo(x1+r,y1); ctx.arcTo(x1+w,y1,x1+w,y1+h,r);
+  ctx.arcTo(x1+w,y1+h,x1,y1+h,r); ctx.arcTo(x1,y1+h,x1,y1,r); ctx.arcTo(x1,y1,x1+w,y1,r); ctx.closePath();
+}
+
+/* =========================================================
+   MATERI SINGKAT
+   ========================================================= */
+function fillMateri(){
+  document.getElementById("materiBody").innerHTML=MISSIONS.map(m=>`
+    <div class="rule"><span class="e">${m.icon}</span><span><b>${m.title}</b><br>${m.materi.join(" · ")}</span></div>`).join("")+
+    `<div class="rule"><span class="e">🧭</span><span><b>Urutan jalannya makanan</b><br>Mulut → kerongkongan → lambung → usus halus → usus besar → rektum → anus</span></div>`;
+}
+
+/* =========================================================
+   PENGATURAN
+   ========================================================= */
+function syncSwitches(){
+  ["music","sfx","timer","dark"].forEach(k=>{
+    document.getElementById("sw-"+k).classList.toggle("on", !!S.settings[k]);
+  });
+}
+function toggleSet(k){
+  S.settings[k]=!S.settings[k]; save(); syncSwitches();
+  if(k==="dark") applyTheme();
+  if(k==="music"){ S.settings.music?startMusic():stopMusic(); updateMusicBtn(); }
+  if(k==="timer" && document.getElementById("screen-play").classList.contains("active") && !answered) startTimer(false);
+  sfx("click");
+}
+function applyTheme(){ document.documentElement.dataset.theme = S.settings.dark?"dark":"light"; }
+function toggleMusic(){ S.settings.music=!S.settings.music; save(); S.settings.music?startMusic():stopMusic(); updateMusicBtn(); syncSwitches(); }
+function updateMusicBtn(){
+  document.getElementById("musicBtn").textContent=(S.settings.music?"🔊":"🔇")+" Musik: "+(S.settings.music?"on":"off");
+  document.getElementById("fMusic").textContent=S.settings.music?"🔊":"🔇";
+}
+function toggleFull(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(()=>{});
+  else document.exitFullscreen?.();
+}
+
+/* =========================================================
+   AUDIO (WebAudio, tanpa file eksternal)
+   ========================================================= */
+let AC=null, musicTimer=null, musicGain=null;
+function ac(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(AC&&AC.state==="suspended") AC.resume(); return AC; }
+function tone(freq,dur,type,vol,delay){
+  if(!S.settings.sfx) return;
+  const a=ac(); if(!a) return;
+  const o=a.createOscillator(), g=a.createGain();
+  o.type=type||"sine"; o.frequency.value=freq;
+  const t=a.currentTime+(delay||0);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol||.14,t+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+dur+.05);
+}
+function sfx(kind){
+  switch(kind){
+    case "click": tone(520,.08,"triangle",.07); break;
+    case "correct": tone(660,.12,"triangle",.13); tone(880,.16,"triangle",.12,.1); tone(1180,.2,"triangle",.1,.2); break;
+    case "wrong": tone(220,.2,"sawtooth",.09); tone(160,.28,"sawtooth",.08,.12); break;
+    case "badge": [523,659,784,1046].forEach((f,i)=>tone(f,.2,"triangle",.12,i*.11)); break;
+    case "level": tone(392,.14,"triangle",.1); tone(523,.2,"triangle",.1,.12); break;
+    case "start": [392,523,659].forEach((f,i)=>tone(f,.18,"triangle",.11,i*.1)); break;
+    case "win": [523,659,784,1046,1318].forEach((f,i)=>tone(f,.28,"triangle",.13,i*.14)); break;
+    case "over": [330,262,196].forEach((f,i)=>tone(f,.3,"sine",.1,i*.16)); break;
+  }
+}
+function startMusic(){
+  if(!S.settings.music) return;
+  const a=ac(); if(!a||musicTimer) return;
+  musicGain=a.createGain(); musicGain.gain.value=.035; musicGain.connect(a.destination);
+  const notes=[261.6,329.6,392,523.2,392,329.6,293.7,349.2,440,349.2];
+  let i=0;
+  const step=()=>{
+    if(!musicGain) return;
+    const o=a.createOscillator(), g=a.createGain();
+    o.type="sine"; o.frequency.value=notes[i%notes.length];
+    const t=a.currentTime;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(1,t+.08); g.gain.exponentialRampToValueAtTime(.001,t+.75);
+    o.connect(g); g.connect(musicGain); o.start(t); o.stop(t+.8);
+    i++;
+  };
+  step(); musicTimer=setInterval(step,620);
+}
+function stopMusic(){ if(musicTimer){ clearInterval(musicTimer); musicTimer=null; } if(musicGain){ musicGain.disconnect(); musicGain=null; } }
+document.addEventListener("click",()=>{ ac(); if(S.settings.music&&!musicTimer) startMusic(); },{once:true});
+
+/* =========================================================
+   EFEK VISUAL
+   ========================================================= */
+const pc=document.getElementById("particles"), px=pc.getContext("2d");
+let parts=[];
+function sizeCanvas(){
+  [pc,document.getElementById("confetti")].forEach(c=>{ c.width=innerWidth; c.height=innerHeight; });
+}
+addEventListener("resize",sizeCanvas); sizeCanvas();
+for(let i=0;i<38;i++) parts.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+  r:Math.random()*3+1,s:Math.random()*.35+.12,o:Math.random()*.5+.2,h:Math.random()*360});
+(function loopParts(){
+  px.clearRect(0,0,pc.width,pc.height);
+  parts.forEach(p=>{
+    p.y-=p.s; if(p.y<-10){ p.y=pc.height+10; p.x=Math.random()*pc.width; }
+    px.beginPath(); px.arc(p.x,p.y,p.r,0,7);
+    px.fillStyle="hsla("+(180+p.h/4)+",90%,70%,"+p.o+")"; px.fill();
+  });
+  requestAnimationFrame(loopParts);
+})();
+
+const cc=document.getElementById("confetti"), cx=cc.getContext("2d");
+let conf=[], confRun=false;
+function confettiBurst(n){
+  if(!n) return;
+  const colors=["#ff4d8d","#ff9f2e","#28d17c","#25e0e0","#7b3ff2","#ffffff"];
+  for(let i=0;i<n;i++) conf.push({x:cc.width/2+(Math.random()-.5)*cc.width*.6,y:cc.height*.28,
+    vx:(Math.random()-.5)*9,vy:Math.random()*-11-3,g:.32,w:Math.random()*9+4,h:Math.random()*6+3,
+    c:colors[Math.floor(Math.random()*colors.length)],a:1,rot:Math.random()*6});
+  if(!confRun){ confRun=true; loopConf(); }
+}
+function loopConf(){
+  cx.clearRect(0,0,cc.width,cc.height);
+  conf=conf.filter(p=>p.a>0.02 && p.y<cc.height+40);
+  conf.forEach(p=>{
+    p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.rot+=.14; p.a-=.006;
+    cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot); cx.globalAlpha=Math.max(0,p.a);
+    cx.fillStyle=p.c; cx.fillRect(-p.w/2,-p.h/2,p.w,p.h); cx.restore();
+  });
+  if(conf.length) requestAnimationFrame(loopConf); else { confRun=false; cx.clearRect(0,0,cc.width,cc.height); }
+}
+function popScore(t){
+  const d=document.createElement("div"); d.className="scorepop"; d.textContent=t;
+  document.body.appendChild(d); setTimeout(()=>d.remove(),1000);
+}
+function toast(msg){
+  const d=document.createElement("div");
+  d.style.cssText="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:120;background:rgba(20,12,60,.95);"+
+    "border:1px solid var(--card-bd);color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;font-size:.92rem;box-shadow:var(--shadow)";
+  d.textContent=msg; document.body.appendChild(d);
+  setTimeout(()=>{ d.style.transition="opacity .4s"; d.style.opacity="0"; setTimeout(()=>d.remove(),400); },1800);
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+load(); applyTheme(); updateMusicBtn(); refreshResume();
+if(S.name) document.getElementById("pname").value=S.name;
+document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("on",c.dataset.k===S.kelas));
+document.getElementById("pname").addEventListener("keydown",e=>{ if(e.key==="Enter") startGame(); });
+</script>
+</body>
+</html>
